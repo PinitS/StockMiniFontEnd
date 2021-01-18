@@ -7,6 +7,7 @@ const initialState = {
 const changeState = (state = initialState, { type, ...rest }) => {
   switch (type) {
     case 'set':
+      console.log('rest', rest)
       return {...state, ...rest }
     default:
       return state

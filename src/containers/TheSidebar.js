@@ -16,15 +16,18 @@ import CIcon from '@coreui/icons-react'
 
 // sidebar nav config
 import navigation from './_nav'
+import { SET_RESPONSIVE_REQ } from 'src/actionType'
 
 const TheSidebar = () => {
   const dispatch = useDispatch()
-  const show = useSelector(state => state.sidebarShow)
+  const show = useSelector(({ setResponsive }) => setResponsive.sidebarShow);
+  const action = (type, payload) => dispatch({ type, payload });
+
 
   return (
     <CSidebar
       show={show}
-      onShowChange={(val) => dispatch({type: 'set', sidebarShow: val })}
+      onShowChange={(val) => action(SET_RESPONSIVE_REQ , val)}
     >
       <CSidebarBrand className="d-md-down-none" to="/">
         <CIcon

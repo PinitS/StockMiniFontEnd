@@ -5,6 +5,7 @@ import {
   TheFooter,
   TheHeader
 } from './index'
+import TheModal from './TheModal'
 
 const TheLayout = () => {
 
@@ -14,6 +15,7 @@ const TheLayout = () => {
       <div className="c-wrapper">
         <TheHeader/>
         <div className="c-body">
+          <TheModal/>
           <TheContent/>
         </div>
         <TheFooter/>

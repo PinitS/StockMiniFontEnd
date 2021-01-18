@@ -12,7 +12,10 @@ import {
   CCardBody,
 } from "@coreui/react";
 
-import CIcon from "@coreui/icons-react";
+import { useDispatch, useSelector } from "react-redux";
+import { IS_OPEN_MODAL_REQ } from "../../../actionType";
+import CreateForm from "./component/CreateForm";
+import EditForm from "./component/EditForm";
 
 const fields = [
   { key: "#", _style: { width: "2%" } },
@@ -224,6 +227,12 @@ const usersData = [
 ];
 
 export default function StoreCategory() {
+  //--redux && redux-saga
+  const dispatch = useDispatch();
+  const setModal = useSelector(({ setModal }) => setModal);
+  const action = (type, payload) => dispatch({ type, payload });
+  //--end redux && redux-saga
+
   return (
     <div>
       <CContainer fluid>
@@ -231,13 +240,17 @@ export default function StoreCategory() {
           <CCol sm="12">
             <CCard>
               <CCardHeader>
-                <strong>Store info</strong>
+                <strong>Store</strong>
                 <div className="card-header-actions">
                   <CButton
                     color="info"
                     size="sm"
                     onClick={() => {
-                      console.log("delete btn");
+                      action(IS_OPEN_MODAL_REQ, {
+                        isModal: true,
+                        component: <CreateForm />,
+                        modalHeader: "Add Store",
+                      });
                     }}
                   >
                     Add +
@@ -250,7 +263,7 @@ export default function StoreCategory() {
                   fields={fields}
                   tableFilter
                   itemsPerPageSelect
-                  itemsPerPage={20}
+                  itemsPerPage={10}
                   hover
                   sorter
                   pagination
@@ -265,30 +278,30 @@ export default function StoreCategory() {
                     ),
                     action: (item) => (
                       <td>
-                        <CRow className="align-items-center">
-                          <CCol col="6" className="mb-3 mb-xl-0 text-center">
-                            <CButton
-                              color="warning"
-                              size="sm"
-                              onClick={() => {
-                                console.log("delete btn", item.id);
-                              }}
-                            >
-                              edit
-                            </CButton>
-                          </CCol>
-                          <CCol col="6" className="mb-3 mb-xl-0 text-center">
-                            <CButton
-                              color="danger"
-                              size="sm"
-                              onClick={() => {
-                                console.log("delete btn", item.id);
-                              }}
-                            >
-                              delete
-                            </CButton>
-                          </CCol>
-                        </CRow>
+                        <CButton
+                        className="mr-2"
+                          color="warning"
+                          size="sm"
+                          onClick={() => {
+                            action(IS_OPEN_MODAL_REQ, {
+                              isModal: true,
+                              component: <EditForm />,
+                              modalHeader: "Edit Store",
+                            });
+                          }}
+                        >
+                          edit
+                        </CButton>
+
+                        <CButton
+                          color="danger"
+                          size="sm"
+                          onClick={() => {
+                            console.log("delete btn", item.id);
+                          }}
+                        >
+                          delete
+                        </CButton>
                       </td>
                     ),
                   }}

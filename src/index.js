@@ -23,7 +23,7 @@ import rootSaga from "./actionSaga/index";
 const sagaMiddleware = createSagaMiddleware();
 const storeCustom = createStore(
   reduxSaga,
-  composeWithDevTools(applyMiddleware(sagaMiddleware, logger))
+  composeWithDevTools(applyMiddleware(sagaMiddleware, /*logger*/))
 );
 
 sagaMiddleware.run(rootSaga);

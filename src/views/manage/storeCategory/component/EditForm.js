@@ -1,4 +1,6 @@
 import React from "react";
+import { useForm } from "react-hook-form";
+import { useSelector, useDispatch } from "react-redux";
 
 import {
   CButton,
@@ -10,40 +12,86 @@ import {
   CLabel,
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
+import inputValidate from "src/static/InputValidate";
+import { UPDATE_DATA_API_REQ ,IS_OPEN_MODAL_REQ } from "src/actionType";
 
-export default function EditForm() {
+
+export default function EditForm(props) {
+  // redux && redux-saga
+  const dispatch = useDispatch();
+  const action = (type, payload) => dispatch({ type, payload });
+  const dataApi = useSelector(({ setDataApi }) => setDataApi.data);
+  //--end redux && redux-saga
+  const findObject = (id) => dataApi.filter(item => item.id === id)[0];
+  //find in object
+
+  const data = findObject(props.id);
+
+  console.log(' data in edit Form', data)
+
+  const { register, handleSubmit, errors } = useForm({
+    defaultValues: data
+  });
+
+
+  const onSubmit = (inputData , e) => {
+    e.target.reset();
+    action(UPDATE_DATA_API_REQ, {
+      input: inputData,
+      path: "Store/",
+      subPath: "update",
+    }); 
+    action(IS_OPEN_MODAL_REQ, {
+      isModal: false,
+      component: null,
+      modalHeader: null,
+    })
+    console.log('inputData', inputData)
+  };
+
   return (
     <div>
-      <CForm action="" method="post" className="form-horizontal">
+      <CForm onSubmit={handleSubmit(onSubmit)} className="form-horizontal">
         <CFormGroup row>
           <CCol md="3">
-            <CLabel htmlFor="hf-name">Name</CLabel>
+            <CLabel htmlFor="name">name</CLabel>
           </CCol>
+          <CInput
+              innerRef={register}
+              type="hidden"
+              name="id"
+            />
           <CCol xs="12" md="9">
             <CInput
+              innerRef={register(inputValidate.name)}
               type="text"
-              id="hf-name"
-              name="hf-name"
+              id="name"
+              name="name"
               placeholder="Enter Name..."
             />
             <CFormText className="help-block">
-              Please enter Store Name
+              {errors.name && (
+                <span className="text-danger">{errors.name.message}</span>
+              )}
             </CFormText>
           </CCol>
         </CFormGroup>
         <CFormGroup row>
           <CCol md="3">
-            <CLabel htmlFor="hf-detail">Detail</CLabel>
+            <CLabel htmlFor="detail">Detail</CLabel>
           </CCol>
           <CCol xs="12" md="9">
             <CInput
+              innerRef={register(inputValidate.detail)}
               type="text"
-              id="hf-detail"
-              name="hf-detail"
+              id="detail"
+              name="detail"
               placeholder="Enter detail..."
             />
             <CFormText className="help-block">
-              Please enter Store detail
+              {errors.detail && (
+                <span className="text-danger">{errors.detail.message}</span>
+              )}
             </CFormText>
           </CCol>
         </CFormGroup>

@@ -1,27 +1,24 @@
-import React from 'react'
-import {
-  TheContent,
-  TheSidebar,
-  TheFooter,
-  TheHeader
-} from './index'
-import TheModal from './TheModal'
+import React from "react";
+import { TheContent, TheSidebar, TheFooter, TheHeader } from "./index";
+import TheModal from "./TheModal";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const TheLayout = () => {
-
   return (
     <div className="c-app c-default-layout">
-      <TheSidebar/>
+      <TheSidebar />
       <div className="c-wrapper">
-        <TheHeader/>
+        <TheHeader />
         <div className="c-body">
-          <TheModal/>
-          <TheContent/>
+          <ToastContainer />
+          <TheModal />
+          <TheContent />
         </div>
-        <TheFooter/>
+        <TheFooter />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default TheLayout
+export default TheLayout;

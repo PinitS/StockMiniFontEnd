@@ -3,10 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { IS_OPEN_MODAL_REQ } from "../actionType";
 
 import {
-  CButton,
   CModal,
   CModalBody,
-  CModalFooter,
   CModalHeader,
   CModalTitle,
 } from "@coreui/react";

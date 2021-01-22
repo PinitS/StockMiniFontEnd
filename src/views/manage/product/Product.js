@@ -1,93 +1,143 @@
 import React from "react";
-import { useForm } from "react-hook-form";
 import {
+  CDataTable,
+  CContainer,
   CButton,
+  CRow,
   CCol,
-  CForm,
-  CFormGroup,
-  CFormText,
-  CInput,
-  CLabel,
+  CCard,
+  CCardHeader,
+  CCardBody,
 } from "@coreui/react";
-import CIcon from "@coreui/icons-react";
-import inputValidate from "src/static/InputValidate";
+
+import { useDispatch, useSelector } from "react-redux";
+import {
+  CALL_ALL_DATA_API_REQ,
+  DELETE_DATA_API_REQ,
+  IS_OPEN_MODAL_REQ,
+  GET_DROPDOWN_DATA_API_REQ,
+} from "../../../actionType";
+import CreateForm from "./component/CreateForm";
+import EditForm from "./component/EditForm";
+
+const fields = [
+  { key: "#" },
+  { key: "name" },
+  { key: "type" },
+  { key: "price" },
+  { key: "amount" },
+  { key: "active" },
+  { key: "sku" },
+  { key: "detail" },
+  { key: "img" },
+  {
+    key: "action",
+    sorter: false,
+    filter: false,
+  },
+];
 
 export default function Product() {
-    const dataTT = {
-        name : "YYYYYYY",
-        detail:"xxxxxxxxxxxxxxxxxx"
-    }
-  const { register, handleSubmit, errors } = useForm({
-      defaultValues : dataTT
-  });
-  const onSubmit = (data) => {
-    console.log('data', data)
-    console.log("send " + JSON.stringify(data) +" to serve");
-  };
-
-  
-
+  const dispatch = useDispatch();
+  const dataApi = useSelector(({ setDataApi }) => setDataApi.data);
+  const action = (type, payload) => dispatch({ type, payload });
+  //--end redux && redux-saga
+  console.log("dataApi", dataApi);
 
   React.useEffect(() => {
-    
-  }, [])
+    action(CALL_ALL_DATA_API_REQ, "Product/getAll");
+    action(GET_DROPDOWN_DATA_API_REQ, "Other/getAllDropDown");
+  }, []);
 
-
-
-  console.log("errors", errors);
   return (
     <div>
-      <CForm onSubmit={handleSubmit(onSubmit)} className="form-horizontal">
-        <CFormGroup row>
-          <CCol md="3">
-            <CLabel htmlFor="name">Name</CLabel>
+      <CContainer fluid>
+        <CRow>
+          <CCol sm="12">
+            <CCard>
+              <CCardHeader>
+                <strong>Products information</strong>
+                <div className="card-header-actions">
+                  <CButton
+                    color="info"
+                    size="sm"
+                    onClick={() => {
+                      action(IS_OPEN_MODAL_REQ, {
+                        isModal: true,
+                        component: <CreateForm />,
+                        modalHeader: "Add Product",
+                      });
+                    }}
+                  >
+                    Add +
+                  </CButton>
+                </div>
+              </CCardHeader>
+              <CCardBody>
+                {dataApi && (
+                    <CDataTable
+                      items={dataApi}
+                      fields={fields}
+                      tableFilter
+                      itemsPerPageSelect
+                      itemsPerPage={10}
+                      hover
+                      sorter
+                      pagination
+                      scopedSlots={{
+                        "#": (item, index) => <td>{index + 1}</td>,
+                        img: (item, index) => {
+                          return (
+                            <td key={index}>
+                              <img src={item.img} />
+                            </td>
+                          );
+                        },
+
+                        action: (item) => (
+                          <td>
+                            <CButton
+                              className="mr-2"
+                              color="warning"
+                              size="sm"
+                              onClick={() => {
+                                console.log("edit btn", item.id);
+                                // action(GET_ID_DATA_API_REQ, item.id);
+                                action(IS_OPEN_MODAL_REQ, {
+                                  isModal: true,
+                                  component: <EditForm id={item.id} />,
+                                  modalHeader: "Edit Product",
+                                });
+                              }}
+                            >
+                              edit
+                            </CButton>
+
+                            {
+                              /*item.delete_active &&*/ <CButton
+                                color="danger"
+                                size="sm"
+                                onClick={() => {
+                                  console.log("delete btn", item.id);
+                                  action(DELETE_DATA_API_REQ, {
+                                    path: "Type/",
+                                    subPath: "delete/" + item.id,
+                                  });
+                                }}
+                              >
+                                delete
+                              </CButton>
+                            }
+                          </td>
+                        ),
+                      }}
+                    />
+                )}
+              </CCardBody>
+            </CCard>
           </CCol>
-          <CCol xs="12" md="9">
-            <CInput
-              innerRef={register(inputValidate.Name)}
-              type="text"
-              id="name"
-              name="name"
-              placeholder="Enter Name..."
-            />
-            <CFormText className="help-block">
-              {errors.name && (
-                <span className="text-danger">{errors.name.message}</span>
-              )}
-            </CFormText>
-          </CCol>
-        </CFormGroup>
-        <CFormGroup row>
-          <CCol md="3">
-            <CLabel htmlFor="detail">Detail</CLabel>
-          </CCol>
-          <CCol xs="12" md="9">
-            <CInput
-              innerRef={register(inputValidate.Detail)}
-              type="text"
-              id="detail"
-              name="detail"
-              placeholder="Enter detail..."
-            />
-            <CFormText className="help-block">
-              {errors.detail && (
-                <span className="text-danger">{errors.detail.message}</span>
-              )}
-            </CFormText>
-          </CCol>
-        </CFormGroup>
-        <CButton type="reset" size="sm" color="danger">
-          <CIcon name="cil-ban" /> Reset
-        </CButton>
-        <CButton
-          type="submit"
-          size="sm"
-          className="float-right"
-          color="primary"
-        >
-          <CIcon name="cil-scrubber" /> Submit
-        </CButton>
-      </CForm>
+        </CRow>
+      </CContainer>
     </div>
   );
 }

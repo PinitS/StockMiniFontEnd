@@ -6,6 +6,8 @@ import {
   CALL_ALL_DATA_API_REQ,
   CREATE_DATA_API_REQ,
   UPDATE_DATA_API_REQ,
+  DELETE_DATA_API_REQ,
+  GET_DROPDOWN_DATA_API_REQ,
 } from "../actionType";
 
 import {
@@ -15,6 +17,8 @@ import {
   setAllDataApi,
   setCreateDataApi,
   setUpdateDataApi,
+  setDeleteDataApi,
+  setDropDownDataApi,
 } from "../actionSaga/saga.action";
 
 export function* watchSetCheckStore() {
@@ -41,6 +45,14 @@ export function* watchSetUpdateDataApi() {
   yield takeEvery(UPDATE_DATA_API_REQ, setUpdateDataApi);
 }
 
+export function* watchSetDeleteDataApi() {
+  yield takeEvery(DELETE_DATA_API_REQ, setDeleteDataApi);
+}
+
+export function* watchSetDropDownDataApi() {
+  yield takeEvery(GET_DROPDOWN_DATA_API_REQ, setDropDownDataApi);
+}
+
 export default function* rootSaga() {
   yield all([
     watchSetCheckStore(),
@@ -49,5 +61,7 @@ export default function* rootSaga() {
     watchSetDataAllApi(),
     watchSetCreateDataApi(),
     watchSetUpdateDataApi(),
+    watchSetDeleteDataApi(),
+    watchSetDropDownDataApi(),
   ]);
 }

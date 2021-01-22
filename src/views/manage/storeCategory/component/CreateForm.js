@@ -26,6 +26,7 @@ export default function CreateForm() {
   const onSubmit = (inputData, e) => {
     e.target.reset();
     action(CREATE_DATA_API_REQ, {
+      // input: JSON.stringify(inputData),
       input: inputData,
       path: "Store/",
       subPath: "create",

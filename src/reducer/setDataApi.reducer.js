@@ -2,6 +2,7 @@ import {
   CALL_ALL_DATA_API,
   CREATE_DATA_API,
   UPDATE_DATA_API,
+  DELETE_DATA_API,
 } from "src/actionType";
 
 const initialState = {
@@ -15,7 +16,9 @@ export default (state = initialState, { type, payload }) => {
     case CREATE_DATA_API:
       return { ...state };
     case UPDATE_DATA_API:
-        return { ...state };
+      return { ...state };
+    case DELETE_DATA_API:
+      return { ...state };
     default:
       return state;
   }

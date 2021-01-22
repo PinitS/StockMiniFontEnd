@@ -8,6 +8,8 @@ import {
   IS_OPEN_MODAL,
   CALL_ALL_DATA_API,
   CREATE_DATA_API,
+  DELETE_DATA_API,
+  GET_DROPDOWN_DATA_API
 } from "../actionType";
 
 export function* setCheckStore() {
@@ -31,6 +33,7 @@ export function* setAllDataApi({ payload }) {
 
 
 export function* setCreateDataApi({ payload }) {
+  console.log('payload', payload)
   let responseData = null;
   yield fetch(apiConfig.path + payload.path + payload.subPath, {
     method: "POST",
@@ -59,4 +62,24 @@ export function* setUpdateDataApi({ payload }) {
   yield put({ type: CREATE_DATA_API });
   yield toast(responseData == null ? "Update Fail" : responseData.msg);
   yield setAllDataApi({ payload: payload.path + "getAll" });
+}
+
+export function* setDeleteDataApi({ payload }) {
+  let responseData = null;
+  yield fetch(apiConfig.path + payload.path + payload.subPath, {
+    method: "DELETE",
+  })
+    .then((res) => res.json())
+    .then((data) => (responseData = data))
+    .catch((error) => console.log("error", error));
+  yield put({ type: DELETE_DATA_API });
+  yield toast(responseData == null ? "Delete Fail" : responseData.msg);
+  yield setAllDataApi({ payload: payload.path + "getAll" });
+}
+
+export function* setDropDownDataApi({ payload }) {
+  const response = yield call(fetch, apiConfig.path + payload);
+  const data = yield response.json();
+  console.log('data', data)
+  yield put({ type: GET_DROPDOWN_DATA_API, payload: data.dataSet });
 }

@@ -36,7 +36,7 @@ export default function EditForm(props) {
     e.target.reset();
     action(UPDATE_DATA_API_REQ, {
       input: inputData,
-      path: "Store/",
+      path: "MainCategory/",
       subPath: "update",
     });
     action(IS_OPEN_MODAL_REQ, {

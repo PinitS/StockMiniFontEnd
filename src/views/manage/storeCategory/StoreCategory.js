@@ -14,6 +14,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import {
   CALL_ALL_DATA_API_REQ,
+  DELETE_DATA_API_REQ,
   IS_OPEN_MODAL_REQ,
 } from "../../../actionType";
 import CreateForm from "./component/CreateForm";
@@ -36,7 +37,7 @@ export default function StoreCategory() {
   const dataApi = useSelector(({ setDataApi }) => setDataApi.data);
   const action = (type, payload) => dispatch({ type, payload });
   //--end redux && redux-saga
-  console.log('dataApi', dataApi)
+  console.log("dataApi", dataApi);
 
   React.useEffect(() => {
     action(CALL_ALL_DATA_API_REQ, "Store/getAll");
@@ -98,15 +99,21 @@ export default function StoreCategory() {
                             edit
                           </CButton>
 
-                          <CButton
-                            color="danger"
-                            size="sm"
-                            onClick={() => {
-                              console.log("delete btn", item.id);
-                            }}
-                          >
-                            delete
-                          </CButton>
+                          {item.delete_active && (
+                            <CButton
+                              color="danger"
+                              size="sm"
+                              onClick={() => {
+                                console.log("delete btn", item.id);
+                                action(DELETE_DATA_API_REQ, {
+                                  path: "Store/",
+                                  subPath: "delete/" + item.id,
+                                });
+                              }}
+                            >
+                              delete
+                            </CButton>
+                          )}
                         </td>
                       ),
                     }}

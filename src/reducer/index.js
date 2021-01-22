@@ -3,10 +3,12 @@ import storeCheck from "../reducer/store.reducer";
 import setResponsive from "../reducer/setResponsive.reducer";
 import setModal from "../reducer/setModal.reducer";
 import setDataApi from "../reducer/setDataApi.reducer";
+import setDropDownApi from "../reducer/setDorpDown.reducer";
 
 export default combineReducers({
   storeCheck,
   setResponsive,
   setModal,
   setDataApi,
+  setDropDownApi,
 });

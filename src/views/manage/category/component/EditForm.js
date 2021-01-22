@@ -10,6 +10,7 @@ import {
   CFormText,
   CInput,
   CLabel,
+  CSelect,
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import inputValidate from "src/static/InputValidate";
@@ -20,6 +21,10 @@ export default function EditForm(props) {
   const dispatch = useDispatch();
   const action = (type, payload) => dispatch({ type, payload });
   const dataApi = useSelector(({ setDataApi }) => setDataApi.data);
+
+  const DropDownApi = useSelector(
+    ({ setDropDownApi }) => setDropDownApi.dropdown
+  );
   //--end redux && redux-saga
   const findObject = (id) => dataApi.filter((item) => item.id === id)[0];
   //find in object
@@ -36,7 +41,7 @@ export default function EditForm(props) {
     e.target.reset();
     action(UPDATE_DATA_API_REQ, {
       input: inputData,
-      path: "Store/",
+      path: "Category/",
       subPath: "update",
     });
     action(IS_OPEN_MODAL_REQ, {
@@ -52,10 +57,10 @@ export default function EditForm(props) {
       <CForm onSubmit={handleSubmit(onSubmit)} className="form-horizontal">
         <CFormGroup row>
           <CCol md="3">
-            <CLabel htmlFor="name">name</CLabel>
+            <CLabel htmlFor="name">Name</CLabel>
           </CCol>
-          <CInput innerRef={register} type="hidden" name="id" />
           <CCol xs="12" md="9">
+            <CInput innerRef={register} type="hidden" name="id" />
             <CInput
               innerRef={register(inputValidate.name)}
               type="text"
@@ -89,6 +94,46 @@ export default function EditForm(props) {
             </CFormText>
           </CCol>
         </CFormGroup>
+
+        <CFormGroup row>
+          <CCol md="3">
+            <CLabel htmlFor="store_id">Store</CLabel>
+          </CCol>
+          <CCol xs="12" md="9">
+            <CSelect custom name="store_id" id="store_id" innerRef={register}>
+              {DropDownApi.DDStore.map((item, index) => {
+                return (
+                  <option key={index} value={item.id}>
+                    {item.name}
+                  </option>
+                );
+              })}
+            </CSelect>
+          </CCol>
+        </CFormGroup>
+
+        <CFormGroup row>
+          <CCol md="3">
+            <CLabel htmlFor="main_category_id">Main Category</CLabel>
+          </CCol>
+          <CCol xs="12" md="9">
+            <CSelect
+              custom
+              name="main_category_id"
+              id="main_category_id"
+              innerRef={register}
+            >
+              {DropDownApi.DDMainCategory.map((item, index) => {
+                return (
+                  <option key={index} value={item.id}>
+                    {item.name}
+                  </option>
+                );
+              })}
+            </CSelect>
+          </CCol>
+        </CFormGroup>
+
         <CButton type="reset" size="sm" color="danger">
           <CIcon name="cil-ban" /> Reset
         </CButton>

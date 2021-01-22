@@ -13,7 +13,7 @@ import { Provider } from "react-redux";
 
 import { createStore, applyMiddleware } from "redux";
 
-import logger from "redux-logger";
+// import logger from "redux-logger";
 import reduxSaga from "./reducer/index";
 
 import createSagaMiddleware from "redux-saga";

@@ -22,7 +22,7 @@ import {
   TheHeaderDropdownNotif,
   TheHeaderDropdownTasks,
 } from "./index";
-import { SET_RESPONSIVE_REQ } from "src/actionType";
+import { SET_RESPONSIVE_REQ } from "src/sagaType/responsive";
 
 const TheHeader = () => {
   const dispatch = useDispatch();

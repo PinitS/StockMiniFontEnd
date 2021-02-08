@@ -11,17 +11,18 @@ import {
   CInput,
   CLabel,
   CSelect,
-  CSwitch,
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import inputValidate from "src/static/InputValidate";
-import { CREATE_DATA_API_REQ, IS_OPEN_MODAL_REQ } from "src/actionType";
+import { IS_OPEN_MODAL_REQ } from "src/sagaType/modal";
+import { PRODUCT_CREATE_DATA_API_REQ } from "src/sagaType/product";
 
 export default function CreateForm() {
   //--redux && redux-saga
-  const DropDownApi = useSelector(
-    ({ setDropDownApi }) => setDropDownApi.dropdown
-  );
+  const dataDropdown = useSelector(({ setDropdown }) => setDropdown.data);
+
+  const [dropDownCategory, setDropDownCategory] = React.useState([]);
+  const [dropDownType, setDropDownType] = React.useState([]);
 
   const dispatch = useDispatch();
   const action = (type, payload) => dispatch({ type, payload });
@@ -29,13 +30,17 @@ export default function CreateForm() {
 
   const { register, handleSubmit, errors } = useForm({});
   const onSubmit = (inputData, e) => {
-    console.log("inputData", inputData.img_path[0]);
-    // e.target.reset();
-    action(CREATE_DATA_API_REQ, {
-      input: inputData.img_path[0],
-      path: "Product/",
+    console.log("inputData", inputData);
+    typeof inputData.img_path[0] === "undefined"
+      ? delete inputData["img_path"]
+      : (inputData.img_path = inputData.img_path[0]);
+    console.log("inputData", inputData);
+
+    action(PRODUCT_CREATE_DATA_API_REQ, {
+      input: inputData,
       subPath: "create",
     });
+    // e.target.reset();
     action(IS_OPEN_MODAL_REQ, {
       isModal: false,
       component: null,
@@ -43,16 +48,77 @@ export default function CreateForm() {
     });
   };
 
+  const getDDCategories = (e) => {
+    var DDProductCategory = dataDropdown.DDProductCategory.filter(
+      (DDProductCategory) => {
+        return DDProductCategory.store_id == e.target.value;
+      }
+    );
+    setDropDownCategory(DDProductCategory);
+  };
+
+  const getDDTypes = (e) => {
+    var DDProductType = dataDropdown.DDProductType.filter((DDProductType) => {
+      return DDProductType.category_id == e.target.value;
+    });
+    setDropDownType(DDProductType);
+  };
+
   return (
     <div>
       <CForm onSubmit={handleSubmit(onSubmit)} className="form-horizontal">
-        {/* <CFormGroup row>
+        <CFormGroup row>
           <CCol md="3">
-            <CLabel htmlFor="type_id">Type</CLabel>
+            <CLabel htmlFor="store_id">Store</CLabel>
+          </CCol>
+          {/* dummy userID */}
+          <CInput
+            innerRef={register}
+            type="hidden"
+            name="user_id"
+            defaultValue={1}
+          />
+          {/* dummy userID */}
+          <CCol xs="12" md="9">
+            <CSelect
+              custom
+              name="store_id"
+              id="store_id"
+              innerRef={register(inputValidate.dropDown)}
+              onChange={getDDCategories}
+            >
+              <option value="">Please Selected</option>
+              {Object.entries(dataDropdown.DDStore).map(([key, value]) => {
+                return (
+                  <option key={key} value={key}>
+                    {value}
+                  </option>
+                );
+              })}
+            </CSelect>
+            <CFormText className="help-block">
+              {errors.store_id && (
+                <span className="text-danger">{errors.store_id.message}</span>
+              )}
+            </CFormText>
+          </CCol>
+        </CFormGroup>
+
+        <CFormGroup row>
+          <CCol md="3">
+            <CLabel htmlFor="category_id">Category</CLabel>
           </CCol>
           <CCol xs="12" md="9">
-            <CSelect custom name="type_id" id="type_id" innerRef={register}>
-              {DropDownApi.DDType.map((item, index) => {
+            <CSelect
+              disabled={dropDownCategory.length == 0 ? true : false}
+              custom
+              name="category_id"
+              id="category_id"
+              innerRef={register(inputValidate.dropDown)}
+              onChange={getDDTypes}
+            >
+              <option value="">Please Selected</option>
+              {dropDownCategory.map((item, index) => {
                 return (
                   <option key={index} value={item.id}>
                     {item.name}
@@ -60,6 +126,46 @@ export default function CreateForm() {
                 );
               })}
             </CSelect>
+            <CFormText className="help-block">
+              {errors.category_id && (
+                <span className="text-danger">
+                  {errors.category_id.message}
+                </span>
+              )}
+            </CFormText>
+          </CCol>
+        </CFormGroup>
+
+        <CFormGroup row>
+          <CCol md="3">
+            <CLabel htmlFor="type_id">Type</CLabel>
+          </CCol>
+          <CCol xs="12" md="9">
+            <CSelect
+              disabled={
+                dropDownType.length == 0 || dropDownCategory.length == 0
+                  ? true
+                  : false
+              }
+              custom
+              name="type_id"
+              id="type_id"
+              innerRef={register(inputValidate.dropDown)}
+            >
+              <option value="">Please Selected</option>
+              {dropDownType.map((item, index) => {
+                return (
+                  <option key={index} value={item.id}>
+                    {item.name}
+                  </option>
+                );
+              })}
+            </CSelect>
+            <CFormText className="help-block">
+              {errors.type_id && (
+                <span className="text-danger">{errors.type_id.message}</span>
+              )}
+            </CFormText>
           </CCol>
         </CFormGroup>
 
@@ -90,7 +196,7 @@ export default function CreateForm() {
           <CCol xs="12" md="9">
             <CInput
               innerRef={register(inputValidate.price)}
-              type="text"
+              type="number"
               id="price"
               name="price"
               placeholder="Enter Price..."
@@ -110,7 +216,7 @@ export default function CreateForm() {
           <CCol xs="12" md="9">
             <CInput
               innerRef={register(inputValidate.amount)}
-              type="text"
+              type="number"
               id="amount"
               name="amount"
               placeholder="Enter Amount..."
@@ -122,26 +228,12 @@ export default function CreateForm() {
             </CFormText>
           </CCol>
         </CFormGroup>
-
-        <CFormGroup row>
-          <CCol md="3">
-            <CLabel htmlFor="amount">Active</CLabel>
-          </CCol>
-          <CCol xs="12" md="9">
-            <CSwitch
-              innerRef={register}
-              className={"mx-1"}
-              shape={"pill"}
-              color={"success"}
-              labelOn={"\u2713"}
-              labelOff={"\u2715"}
-              id="active"
-              name="active"
-              defaultChecked
-            />
-          </CCol>
-        </CFormGroup>
-
+        <CInput
+          innerRef={register}
+          type="hidden"
+          name="active"
+          defaultValue={1}
+        />
         <CFormGroup row>
           <CCol md="3">
             <CLabel htmlFor="recommended_type">Recommended</CLabel>
@@ -153,7 +245,7 @@ export default function CreateForm() {
               id="recommended_type"
               innerRef={register}
             >
-              {DropDownApi.DDRecommended_type.map((item, index) => {
+              {dataDropdown.DDRecommended_type.map((item, index) => {
                 return (
                   <option key={index} value={index}>
                     {item}
@@ -197,7 +289,7 @@ export default function CreateForm() {
               )}
             </CFormText>
           </CCol>
-        </CFormGroup> */}
+        </CFormGroup>
 
         <CFormGroup row>
           <CCol md="3">

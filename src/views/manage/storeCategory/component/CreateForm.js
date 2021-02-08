@@ -13,7 +13,9 @@ import {
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import inputValidate from "src/static/InputValidate";
-import { CREATE_DATA_API_REQ, IS_OPEN_MODAL_REQ } from "src/actionType";
+import { STORE_CREATE_DATA_API_REQ } from "src/sagaType/storeManage";
+import { IS_OPEN_MODAL_REQ } from "src/sagaType/modal";
+// import { CREATE_DATA_API_REQ, IS_OPEN_MODAL_REQ } from "src/sagaReducer/node_modules/src/sagaActionType";
 
 export default function CreateForm() {
   //--redux && redux-saga
@@ -24,11 +26,9 @@ export default function CreateForm() {
 
   const { register, handleSubmit, errors } = useForm({});
   const onSubmit = (inputData, e) => {
-    e.target.reset();
-    action(CREATE_DATA_API_REQ, {
-      // input: JSON.stringify(inputData),
+    console.log('inputData', inputData)
+    action(STORE_CREATE_DATA_API_REQ, {
       input: inputData,
-      path: "Store/",
       subPath: "create",
     });
     action(IS_OPEN_MODAL_REQ, {
@@ -36,6 +36,7 @@ export default function CreateForm() {
       component: null,
       modalHeader: null,
     });
+    e.target.reset();
   };
 
   return (

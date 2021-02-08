@@ -1,4 +1,4 @@
-import { IS_OPEN_MODAL } from "../actionType";
+import { IS_OPEN_MODAL } from "src/sagaType/modal";
 
 const initialState = {
   isModal: false,
@@ -11,10 +11,7 @@ export default (state = initialState, { type, payload }) => {
     case IS_OPEN_MODAL:
       return {
         ...state,
-        // isModal: payload.isModal,
-        // component: payload.component,
-        // modalHeader: payload.modalHeader,
-        ...payload
+        ...payload,
       };
     default:
       return state;

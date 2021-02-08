@@ -1,6 +1,5 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { IS_OPEN_MODAL_REQ } from "../actionType";
 
 import {
   CModal,
@@ -8,12 +7,12 @@ import {
   CModalHeader,
   CModalTitle,
 } from "@coreui/react";
+import { IS_OPEN_MODAL_REQ } from "src/sagaType/modal";
 
 const Modals = () => {
   const dispatch = useDispatch();
   const isModal = useSelector(({ setModal }) => setModal);
   const action = (type, payload) => dispatch({ type, payload });
-  console.log("isModal", isModal.isModal);
 
   return (
     <CModal
@@ -25,7 +24,7 @@ const Modals = () => {
           modalHeader: null,
         })
       }
-      size="lg"
+      size={isModal.size}
     >
       <CModalHeader closeButton>
         <CModalTitle> {isModal.modalHeader}</CModalTitle>

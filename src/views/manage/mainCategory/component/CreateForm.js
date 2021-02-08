@@ -13,21 +13,20 @@ import {
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import inputValidate from "src/static/InputValidate";
-import { CREATE_DATA_API_REQ, IS_OPEN_MODAL_REQ } from "src/actionType";
+import { MAIN_CATEGORY_CREATE_DATA_API_REQ } from "src/sagaType/mainCategory";
+import { IS_OPEN_MODAL_REQ } from "src/sagaType/modal";
 
 export default function CreateForm() {
   //--redux && redux-saga
-  // const setData = useSelector(({ setDataApi }) => setDataApi);
   const dispatch = useDispatch();
   const action = (type, payload) => dispatch({ type, payload });
   //--end redux && redux-saga
 
   const { register, handleSubmit, errors } = useForm({});
   const onSubmit = (inputData, e) => {
-    e.target.reset();
-    action(CREATE_DATA_API_REQ, {
+    console.log('inputData', inputData)
+    action(MAIN_CATEGORY_CREATE_DATA_API_REQ, {
       input: inputData,
-      path: "MainCategory/",
       subPath: "create",
     });
     action(IS_OPEN_MODAL_REQ, {
@@ -35,6 +34,7 @@ export default function CreateForm() {
       component: null,
       modalHeader: null,
     });
+    e.target.reset();
   };
 
   return (

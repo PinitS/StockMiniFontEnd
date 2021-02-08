@@ -1,0 +1,2 @@
+export const ADD_ITEM_TO_CART = "ADD_ITEM_TO_CART";
+export const ADD_ITEM_TO_CART_REQ = "ADD_ITEM_TO_CART_REQ";

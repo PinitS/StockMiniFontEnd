@@ -12,12 +12,10 @@ import {
 } from "@coreui/react";
 
 import { useDispatch, useSelector } from "react-redux";
-import {
-  CALL_ALL_DATA_API_REQ,
-  DELETE_DATA_API_REQ,
-  IS_OPEN_MODAL_REQ,
-  GET_DROPDOWN_DATA_API_REQ
-} from "../../../actionType";
+import { IS_OPEN_MODAL_REQ } from "src/sagaType/modal";
+import { TYPE_CALL_ALL_DATA_API_REQ, TYPE_DELETE_DATA_API_REQ } from "src/sagaType/typeManager";
+import { GET_DROPDOWN_DATA_API_REQ } from "src/sagaType/allDropdown";
+
 import CreateForm from "./component/CreateForm";
 import EditForm from "./component/EditForm";
 
@@ -35,14 +33,12 @@ const fields = [
 
 export default function TypeCategory() {
   const dispatch = useDispatch();
-  const dataApi = useSelector(({ setDataApi }) => setDataApi.data);
+  const data = useSelector(({ setTypeManage }) => setTypeManage.data);
   const action = (type, payload) => dispatch({ type, payload });
   //--end redux && redux-saga
-  console.log("dataApi", dataApi);
-
   React.useEffect(() => {
-    action(CALL_ALL_DATA_API_REQ, "Type/getAll");
-    action(GET_DROPDOWN_DATA_API_REQ, "Other/getAllDropDown");
+    action(TYPE_CALL_ALL_DATA_API_REQ);
+    action(GET_DROPDOWN_DATA_API_REQ);
   }, []);
 
   return (
@@ -62,6 +58,7 @@ export default function TypeCategory() {
                         isModal: true,
                         component: <CreateForm />,
                         modalHeader: "Add Type",
+                        size: "lg",
                       });
                     }}
                   >
@@ -70,9 +67,9 @@ export default function TypeCategory() {
                 </div>
               </CCardHeader>
               <CCardBody>
-                {dataApi && (
+                {data && (
                   <CDataTable
-                    items={dataApi}
+                    items={data}
                     fields={fields}
                     tableFilter
                     itemsPerPageSelect
@@ -89,12 +86,11 @@ export default function TypeCategory() {
                             color="warning"
                             size="sm"
                             onClick={() => {
-                              console.log("edit btn", item.id);
-                              // action(GET_ID_DATA_API_REQ, item.id);
                               action(IS_OPEN_MODAL_REQ, {
                                 isModal: true,
                                 component: <EditForm id={item.id} />,
                                 modalHeader: "Edit Type",
+                                size: "lg",
                               });
                             }}
                           >
@@ -106,9 +102,7 @@ export default function TypeCategory() {
                               color="danger"
                               size="sm"
                               onClick={() => {
-                                console.log("delete btn", item.id);
-                                action(DELETE_DATA_API_REQ, {
-                                  path: "Type/",
+                                action(TYPE_DELETE_DATA_API_REQ, {
                                   subPath: "delete/" + item.id,
                                 });
                               }}

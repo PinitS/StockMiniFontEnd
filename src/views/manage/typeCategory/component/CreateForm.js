@@ -14,13 +14,12 @@ import {
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import inputValidate from "src/static/InputValidate";
-import { CREATE_DATA_API_REQ, IS_OPEN_MODAL_REQ } from "src/actionType";
+import { TYPE_CREATE_DATA_API_REQ } from "src/sagaType/typeManager";
+import { IS_OPEN_MODAL_REQ } from "src/sagaType/modal";
 
 export default function CreateForm() {
   //--redux && redux-saga
-  const DropDownApi = useSelector(
-    ({ setDropDownApi }) => setDropDownApi.dropdown
-  );
+  const dataDropdown = useSelector(({ setDropdown }) => setDropdown.data);
 
   const dispatch = useDispatch();
   const action = (type, payload) => dispatch({ type, payload });
@@ -28,11 +27,8 @@ export default function CreateForm() {
 
   const { register, handleSubmit, errors } = useForm({});
   const onSubmit = (inputData, e) => {
-    console.log("inputData", inputData);
-    e.target.reset();
-    action(CREATE_DATA_API_REQ, {
+    action(TYPE_CREATE_DATA_API_REQ, {
       input: inputData,
-      path: "Type/",
       subPath: "create",
     });
     action(IS_OPEN_MODAL_REQ, {
@@ -40,6 +36,7 @@ export default function CreateForm() {
       component: null,
       modalHeader: null,
     });
+    e.target.reset();
   };
 
   return (
@@ -84,18 +81,29 @@ export default function CreateForm() {
           </CCol>
         </CFormGroup>
 
-        <CFormGroup row>
-          <CCol md="3">
-            <CLabel htmlFor="category_id">Category</CLabel>
-          </CCol>
-          <CCol xs="12" md="9">
-            <CSelect custom name="category_id" id="category_id" innerRef={register}>
-              {DropDownApi.DDCategory.map((item , index) => {
-                return <option key={index} value={item.id}>{item.name}</option>;
-              })}
-            </CSelect>
-          </CCol>
-        </CFormGroup>
+        {dataDropdown && (
+          <CFormGroup row>
+            <CCol md="3">
+              <CLabel htmlFor="category_id">Category</CLabel>
+            </CCol>
+            <CCol xs="12" md="9">
+              <CSelect
+                custom
+                name="category_id"
+                id="category_id"
+                innerRef={register}
+              >
+                {Object.entries(dataDropdown.DDCategory).map(([key, value]) => {
+                  return (
+                    <option key={key} value={key}>
+                      {value}
+                    </option>
+                  );
+                })}
+              </CSelect>
+            </CCol>
+          </CFormGroup>
+        )}
 
         <CButton type="reset" size="sm" color="danger">
           <CIcon name="cil-ban" /> Reset

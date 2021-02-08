@@ -8,15 +8,13 @@ import {
   CCard,
   CCardHeader,
   CCardBody,
+  CBadge,
 } from "@coreui/react";
 
 import { useDispatch, useSelector } from "react-redux";
-import {
-  CALL_ALL_DATA_API_REQ,
-  DELETE_DATA_API_REQ,
-  IS_OPEN_MODAL_REQ,
-  GET_DROPDOWN_DATA_API_REQ,
-} from "../../../actionType";
+import { PRODUCT_CALL_ALL_DATA_API_REQ, PRODUCT_DELETE_DATA_API_REQ, PRODUCT_UPDATE_DATA_API_REQ } from "src/sagaType/product";
+import { GET_DROPDOWN_DATA_API_REQ } from "src/sagaType/allDropdown";
+import { IS_OPEN_MODAL_REQ } from "src/sagaType/modal";
 import CreateForm from "./component/CreateForm";
 import EditForm from "./component/EditForm";
 
@@ -39,14 +37,24 @@ const fields = [
 
 export default function Product() {
   const dispatch = useDispatch();
-  const dataApi = useSelector(({ setDataApi }) => setDataApi.data);
+  const data = useSelector(({ setProduct }) => setProduct.data);
   const action = (type, payload) => dispatch({ type, payload });
+  const verticalMiddleStyle = { verticalAlign: "middle" };
   //--end redux && redux-saga
-  console.log("dataApi", dataApi);
+  // console.log("data", data);
+
+  const color = ["primary", "danger"];
+  const onChangeStatus = (input) => {
+    action(PRODUCT_UPDATE_DATA_API_REQ, {
+      input: input,
+      path: "Product/",
+      subPath: "changeActive",
+    });
+  };
 
   React.useEffect(() => {
-    action(CALL_ALL_DATA_API_REQ, "Product/getAll");
-    action(GET_DROPDOWN_DATA_API_REQ, "Other/getAllDropDown");
+    action(PRODUCT_CALL_ALL_DATA_API_REQ);
+    action(GET_DROPDOWN_DATA_API_REQ);
   }, []);
 
   return (
@@ -66,6 +74,7 @@ export default function Product() {
                         isModal: true,
                         component: <CreateForm />,
                         modalHeader: "Add Product",
+                        size: "lg",
                       });
                     }}
                   >
@@ -74,64 +83,95 @@ export default function Product() {
                 </div>
               </CCardHeader>
               <CCardBody>
-                {dataApi && (
-                    <CDataTable
-                      items={dataApi}
-                      fields={fields}
-                      tableFilter
-                      itemsPerPageSelect
-                      itemsPerPage={10}
-                      hover
-                      sorter
-                      pagination
-                      scopedSlots={{
-                        "#": (item, index) => <td>{index + 1}</td>,
-                        img: (item, index) => {
-                          return (
-                            <td key={index}>
-                              <img src={item.img} />
-                            </td>
-                          );
-                        },
+                {data && (
+                  <CDataTable
+                    items={data}
+                    fields={fields}
+                    style={verticalMiddleStyle}
+                    tableFilter
+                    itemsPerPageSelect
+                    itemsPerPage={10}
+                    hover
+                    sorter
+                    pagination
+                    scopedSlots={{
+                      // "#": (item, index) => (
+                      //   <td style={verticalMiddleStyle}>{index + 1}</td>
+                      // ), // ทำให้ตรงกลางในแนวตั้ง
+                      "#": (item, index) => <td>{index + 1}</td>,
 
-                        action: (item) => (
-                          <td>
-                            <CButton
-                              className="mr-2"
-                              color="warning"
-                              size="sm"
-                              onClick={() => {
-                                console.log("edit btn", item.id);
-                                // action(GET_ID_DATA_API_REQ, item.id);
-                                action(IS_OPEN_MODAL_REQ, {
-                                  isModal: true,
-                                  component: <EditForm id={item.id} />,
-                                  modalHeader: "Edit Product",
-                                });
-                              }}
-                            >
-                              edit
-                            </CButton>
+                      active: (item, index) => (
+                        <td>
+                          {item.active == 1 ? (
+                            <CBadge className="mr-1" color="success">
+                              active
+                            </CBadge>
+                          ) : (
+                            <CBadge className="mr-1" color="danger">
+                              No active
+                            </CBadge>
+                          )}
+                        </td>
+                      ),
 
-                            {
-                              /*item.delete_active &&*/ <CButton
-                                color="danger"
-                                size="sm"
-                                onClick={() => {
-                                  console.log("delete btn", item.id);
-                                  action(DELETE_DATA_API_REQ, {
-                                    path: "Type/",
-                                    subPath: "delete/" + item.id,
-                                  });
-                                }}
-                              >
-                                delete
-                              </CButton>
-                            }
+                      img: (item, index) => {
+                        return (
+                          <td key={index}>
+                            <img src={item.img} />
                           </td>
-                        ),
-                      }}
-                    />
+                        );
+                      },
+
+                      action: (item) => (
+                        <td>
+                          <CButton
+                            className="mr-2"
+                            color="warning"
+                            size="sm"
+                            onClick={() => {
+                              action(IS_OPEN_MODAL_REQ, {
+                                isModal: true,
+                                component: <EditForm id={item.id} />,
+                                modalHeader: "Edit Product",
+                                size: "lg",
+                              });
+                            }}
+                          >
+                            edit
+                          </CButton>
+
+                          <CButton
+                            color="danger"
+                            size="sm"
+                            className="mr-2"
+                            onClick={() => {
+                              action(PRODUCT_DELETE_DATA_API_REQ, {
+                                subPath: "delete/" + item.id,
+                              });
+                            }}
+                          >
+                            delete
+                          </CButton>
+
+                          <CButton
+                            id={item.id}
+                            name={item.id}
+                            size="sm"
+                            color={color[item.active]}
+                            onClick={() => {
+                              let input = {
+                                id: item.id,
+                                active: Math.abs(item.active - 1),
+                              };
+                              onChangeStatus(input);
+                            }}
+                          >
+                            {item.active == 1 ? "ON" : "OFF"}
+                          </CButton>
+                        </td>
+                      ),
+                    }}
+                  />
                 )}
               </CCardBody>
             </CCard>

@@ -1,13 +1,11 @@
-import { GET_DROPDOWN_DATA_API } from "src/actionType";
-
+import { GET_DROPDOWN_DATA_API } from "src/sagaType/allDropdown";
 const initialState = {
-  dropdown: null,
+  data: null,
 };
-
 export default (state = initialState, { type, payload }) => {
   switch (type) {
     case GET_DROPDOWN_DATA_API:
-      return { ...state, dropdown: payload };
+      return { ...state, data: payload };
     default:
       return state;
   }

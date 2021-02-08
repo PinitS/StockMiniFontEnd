@@ -12,13 +12,17 @@ import {
 } from "@coreui/react";
 
 import { useDispatch, useSelector } from "react-redux";
-import {
-  CALL_ALL_DATA_API_REQ,
-  DELETE_DATA_API_REQ,
-  IS_OPEN_MODAL_REQ,
-} from "../../../actionType";
+// import {
+//   CALL_ALL_DATA_API_REQ,
+//   DELETE_DATA_API_REQ,
+// } from "../../../sagaActionType";
 import CreateForm from "./component/CreateForm";
 import EditForm from "./component/EditForm";
+import { IS_OPEN_MODAL_REQ } from "src/sagaType/modal";
+import {
+  STORE_CALL_ALL_DATA_API_REQ,
+  STORE_DELETE_DATA_API_REQ,
+} from "src/sagaType/storeManage";
 
 const fields = [
   { key: "#" },
@@ -34,13 +38,12 @@ const fields = [
 export default function StoreCategory() {
   //--redux && redux-saga
   const dispatch = useDispatch();
-  const dataApi = useSelector(({ setDataApi }) => setDataApi.data);
+  const data = useSelector(({ setStoreManage }) => setStoreManage.data);
   const action = (type, payload) => dispatch({ type, payload });
   //--end redux && redux-saga
-  console.log("dataApi", dataApi);
 
   React.useEffect(() => {
-    action(CALL_ALL_DATA_API_REQ, "Store/getAll");
+    action(STORE_CALL_ALL_DATA_API_REQ);
   }, []);
 
   return (
@@ -60,6 +63,7 @@ export default function StoreCategory() {
                         isModal: true,
                         component: <CreateForm />,
                         modalHeader: "Add Store",
+                        size: "lg",
                       });
                     }}
                   >
@@ -68,9 +72,9 @@ export default function StoreCategory() {
                 </div>
               </CCardHeader>
               <CCardBody>
-                {dataApi && (
+                {data && (
                   <CDataTable
-                    items={dataApi}
+                    items={data}
                     fields={fields}
                     tableFilter
                     itemsPerPageSelect
@@ -87,12 +91,11 @@ export default function StoreCategory() {
                             color="warning"
                             size="sm"
                             onClick={() => {
-                              console.log("edit btn", item.id);
-                              // action(GET_ID_DATA_API_REQ, item.id);
                               action(IS_OPEN_MODAL_REQ, {
                                 isModal: true,
                                 component: <EditForm id={item.id} />,
                                 modalHeader: "Edit Store",
+                                size: "lg",
                               });
                             }}
                           >
@@ -104,9 +107,7 @@ export default function StoreCategory() {
                               color="danger"
                               size="sm"
                               onClick={() => {
-                                console.log("delete btn", item.id);
-                                action(DELETE_DATA_API_REQ, {
-                                  path: "Store/",
+                                action(STORE_DELETE_DATA_API_REQ, {
                                   subPath: "delete/" + item.id,
                                 });
                               }}

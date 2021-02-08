@@ -12,13 +12,14 @@ import {
 } from "@coreui/react";
 
 import { useDispatch, useSelector } from "react-redux";
-import {
-  CALL_ALL_DATA_API_REQ,
-  DELETE_DATA_API_REQ,
-  IS_OPEN_MODAL_REQ,
-} from "../../../actionType";
+
 import CreateForm from "./component/CreateForm";
 import EditForm from "./component/EditForm";
+import {
+  MAIN_CATEGORY_CALL_ALL_DATA_API_REQ,
+  MAIN_CATEGORY_DELETE_DATA_API_REQ,
+} from "src/sagaType/mainCategory";
+import { IS_OPEN_MODAL_REQ } from "src/sagaType/modal";
 
 const fields = [
   { key: "#" },
@@ -34,13 +35,12 @@ const fields = [
 export default function MainCategory() {
   //--redux && redux-saga
   const dispatch = useDispatch();
-  const dataApi = useSelector(({ setDataApi }) => setDataApi.data);
+  const data = useSelector(({ setMainCategory }) => setMainCategory.data);
   const action = (type, payload) => dispatch({ type, payload });
   //--end redux && redux-saga
-  console.log("dataApi", dataApi);
 
   React.useEffect(() => {
-    action(CALL_ALL_DATA_API_REQ, "MainCategory/getAll");
+    action(MAIN_CATEGORY_CALL_ALL_DATA_API_REQ);
   }, []);
 
   return (
@@ -60,6 +60,7 @@ export default function MainCategory() {
                         isModal: true,
                         component: <CreateForm />,
                         modalHeader: "Add MainCategory",
+                        size: "lg",
                       });
                     }}
                   >
@@ -68,9 +69,9 @@ export default function MainCategory() {
                 </div>
               </CCardHeader>
               <CCardBody>
-                {dataApi && (
+                {data && (
                   <CDataTable
-                    items={dataApi}
+                    items={data}
                     fields={fields}
                     tableFilter
                     itemsPerPageSelect
@@ -88,11 +89,11 @@ export default function MainCategory() {
                             size="sm"
                             onClick={() => {
                               console.log("edit btn", item.id);
-                              // action(GET_ID_DATA_API_REQ, item.id);
                               action(IS_OPEN_MODAL_REQ, {
                                 isModal: true,
                                 component: <EditForm id={item.id} />,
                                 modalHeader: "Edit MainCategory",
+                                size: "lg",
                               });
                             }}
                           >
@@ -105,8 +106,7 @@ export default function MainCategory() {
                               size="sm"
                               onClick={() => {
                                 console.log("delete btn", item.id);
-                                action(DELETE_DATA_API_REQ, {
-                                  path: "MainCategory/",
+                                action(MAIN_CATEGORY_DELETE_DATA_API_REQ, {
                                   subPath: "delete/" + item.id,
                                 });
                               }}

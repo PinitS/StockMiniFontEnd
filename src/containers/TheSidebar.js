@@ -16,7 +16,7 @@ import CIcon from '@coreui/icons-react'
 
 // sidebar nav config
 import navigation from './_nav'
-import { SET_RESPONSIVE_REQ } from 'src/actionType'
+import { SET_RESPONSIVE_REQ } from 'src/sagaType/responsive'
 
 const TheSidebar = () => {
   const dispatch = useDispatch()

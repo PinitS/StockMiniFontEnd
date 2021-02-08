@@ -14,13 +14,12 @@ import {
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import inputValidate from "src/static/InputValidate";
-import { CREATE_DATA_API_REQ, IS_OPEN_MODAL_REQ } from "src/actionType";
+import { IS_OPEN_MODAL_REQ } from "src/sagaType/modal";
+import { CATEGORY_CREATE_DATA_API_REQ } from "src/sagaType/category";
 
 export default function CreateForm() {
   //--redux && redux-saga
-  const DropDownApi = useSelector(
-    ({ setDropDownApi }) => setDropDownApi.dropdown
-  );
+  const dataDropdown = useSelector(({ setDropdown }) => setDropdown.data);
 
   const dispatch = useDispatch();
   const action = (type, payload) => dispatch({ type, payload });
@@ -29,10 +28,8 @@ export default function CreateForm() {
   const { register, handleSubmit, errors } = useForm({});
   const onSubmit = (inputData, e) => {
     console.log("inputData", inputData);
-    e.target.reset();
-    action(CREATE_DATA_API_REQ, {
+    action(CATEGORY_CREATE_DATA_API_REQ, {
       input: inputData,
-      path: "Category/",
       subPath: "create",
     });
     action(IS_OPEN_MODAL_REQ, {
@@ -40,6 +37,7 @@ export default function CreateForm() {
       component: null,
       modalHeader: null,
     });
+    e.target.reset();
   };
 
   return (
@@ -83,38 +81,55 @@ export default function CreateForm() {
             </CFormText>
           </CCol>
         </CFormGroup>
+        {dataDropdown && (
+          <div>
+            <CFormGroup row>
+              <CCol md="3">
+                <CLabel htmlFor="store_id">Store</CLabel>
+              </CCol>
+              <CCol xs="12" md="9">
+                <CSelect
+                  custom
+                  name="store_id"
+                  id="store_id"
+                  innerRef={register}
+                >
+                  {Object.entries(dataDropdown.DDStore).map(([key, value]) => {
+                    return (
+                      <option key={key} value={key}>
+                        {value}
+                      </option>
+                    );
+                  })}
+                </CSelect>
+              </CCol>
+            </CFormGroup>
 
-        <CFormGroup row>
-          <CCol md="3">
-            <CLabel htmlFor="store_id">Store</CLabel>
-          </CCol>
-          <CCol xs="12" md="9">
-            <CSelect custom name="store_id" id="store_id" innerRef={register}>
-              {DropDownApi.DDStore.map((item , index) => {
-                return <option key={index} value={item.id}>{item.name}</option>;
-              })}
-            </CSelect>
-          </CCol>
-        </CFormGroup>
-
-        <CFormGroup row>
-          <CCol md="3">
-            <CLabel htmlFor="main_category_id">Main Category</CLabel>
-          </CCol>
-          <CCol xs="12" md="9">
-            <CSelect
-              custom
-              name="main_category_id"
-              id="main_category_id"
-              innerRef={register}
-            >
-              {DropDownApi.DDMainCategory.map((item ,index) => {
-                return <option  key={index} value={item.id}>{item.name}</option>;
-              })}
-            </CSelect>
-          </CCol>
-        </CFormGroup>
-
+            <CFormGroup row>
+              <CCol md="3">
+                <CLabel htmlFor="main_category_id">Main Category</CLabel>
+              </CCol>
+              <CCol xs="12" md="9">
+                <CSelect
+                  custom
+                  name="main_category_id"
+                  id="main_category_id"
+                  innerRef={register}
+                >
+                  {Object.entries(dataDropdown.DDMainCategory).map(
+                    ([key, value]) => {
+                      return (
+                        <option key={key} value={key}>
+                          {value}
+                        </option>
+                      );
+                    }
+                  )}
+                </CSelect>
+              </CCol>
+            </CFormGroup>
+          </div>
+        )}
         <CButton type="reset" size="sm" color="danger">
           <CIcon name="cil-ban" /> Reset
         </CButton>

@@ -13,30 +13,27 @@ import {
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import inputValidate from "src/static/InputValidate";
-import { UPDATE_DATA_API_REQ, IS_OPEN_MODAL_REQ } from "src/actionType";
+import { STORE_UPDATE_DATA_API_REQ } from "src/sagaType/storeManage";
+import { IS_OPEN_MODAL_REQ } from "src/sagaType/modal";
+// import { UPDATE_DATA_API_REQ } from "src/sagaReducer/node_modules/src/sagaActionType";
 
 export default function EditForm(props) {
   // redux && redux-saga
   const dispatch = useDispatch();
   const action = (type, payload) => dispatch({ type, payload });
-  const dataApi = useSelector(({ setDataApi }) => setDataApi.data);
+  const dataAll = useSelector(({ setStoreManage }) => setStoreManage.data);
   //--end redux && redux-saga
-  const findObject = (id) => dataApi.filter((item) => item.id === id)[0];
+  const findObject = (id) => dataAll.filter((item) => item.id === id)[0];
   //find in object
-
   const data = findObject(props.id);
-
   console.log(" data in edit Form", data);
-
   const { register, handleSubmit, errors } = useForm({
     defaultValues: data,
   });
-
   const onSubmit = (inputData, e) => {
-    e.target.reset();
-    action(UPDATE_DATA_API_REQ, {
+    console.log("inputData", inputData);
+    action(STORE_UPDATE_DATA_API_REQ, {
       input: inputData,
-      path: "Store/",
       subPath: "update",
     });
     action(IS_OPEN_MODAL_REQ, {
@@ -44,7 +41,7 @@ export default function EditForm(props) {
       component: null,
       modalHeader: null,
     });
-    console.log("inputData", inputData);
+    e.target.reset();
   };
 
   return (

@@ -1,4 +1,4 @@
-import { SET_RESPONSIVE } from "../actionType";
+import { SET_RESPONSIVE } from "../sagaType/responsive";
 
 const initialState = {
   sidebarShow: "responsive",

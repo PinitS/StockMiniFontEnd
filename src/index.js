@@ -14,11 +14,11 @@ import { Provider } from "react-redux";
 import { createStore, applyMiddleware } from "redux";
 
 // import logger from "redux-logger";
-import reduxSaga from "./reducer/index";
+import reduxSaga from "./sagaReducer/index";
 
 import createSagaMiddleware from "redux-saga";
 import { composeWithDevTools } from "redux-devtools-extension";
-import rootSaga from "./actionSaga/index";
+import rootSaga from "./sagaAction/index";
 
 const sagaMiddleware = createSagaMiddleware();
 const storeCustom = createStore(

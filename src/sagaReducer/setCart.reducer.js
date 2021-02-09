@@ -1,6 +1,6 @@
 import { ADD_ITEM_TO_CART } from "src/sagaType/cart";
 const initialState = {
-  data: null,
+  data: [],
 };
 export default (state = initialState, { type, payload }) => {
   switch (type) {

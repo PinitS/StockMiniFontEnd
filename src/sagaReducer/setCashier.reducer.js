@@ -8,7 +8,7 @@ const initialState = {
 export default (state = initialState, { type, payload }) => {
   switch (type) {
     case CASHIER_CALL_FILTER_DATA_API:
-      return { ...state, data: payload.data };
+      return { ...state, data: payload.data , input: payload.input};
     default:
       return state;
   }

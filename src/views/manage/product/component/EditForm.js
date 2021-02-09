@@ -218,26 +218,6 @@ export default function EditForm(props) {
 
         <CFormGroup row>
           <CCol md="3">
-            <CLabel htmlFor="amount">Amount</CLabel>
-          </CCol>
-          <CCol xs="12" md="9">
-            <CInput
-              innerRef={register(inputValidate.amount)}
-              type="number"
-              id="amount"
-              name="amount"
-              placeholder="Enter Amount..."
-            />
-            <CFormText className="help-block">
-              {errors.amount && (
-                <span className="text-danger">{errors.amount.message}</span>
-              )}
-            </CFormText>
-          </CCol>
-        </CFormGroup>
-
-        <CFormGroup row>
-          <CCol md="3">
             <CLabel htmlFor="recommended_type">Recommended</CLabel>
           </CCol>
           <CCol xs="12" md="9">

@@ -11,8 +11,7 @@ import {
 } from "@coreui/react";
 import { useDispatch, useSelector } from "react-redux";
 import CIcon from "@coreui/icons-react";
-import { ADD_ITEM_TO_CART_REQ } from "src/sagaType/cart";
-import Cart from "./Cart";
+import { ADD_ITEM_TO_CART_REQ, CALL_ITEM_CART_REQ } from "src/sagaType/cart";
 import { CASHIER_CALL_FILTER_DATA_API_REQ } from "src/sagaType/cashier";
 
 const fields = [
@@ -34,88 +33,68 @@ export default function Products() {
   const dispatch = useDispatch();
   const action = (type, payload) => dispatch({ type, payload });
   const data = useSelector(({ setCashier }) => setCashier.data);
-  const dataCart = useSelector(({ setCart }) => setCart.data);
-  let cart = dataCart;
-  let newCashier = data;
-
-  const findObject = (id) => data.filter((item) => item.id === id)[0];
-  const findCart = (id) => cart.filter((item) => item.id === id)[0];
+  const redirect = useSelector(({ setCashier }) => setCashier.input);
   const [state, setState] = React.useState(0);
 
   const onAddToCart = (id) => {
-    console.log("newCashier", newCashier);
-    const data = findObject(id);
-    const product_cart = { id: data.id, name: data.name, price: data.price };
-    const dataInCart = findCart(product_cart.id);
-    const objIndex = newCashier.findIndex((obj) => obj.id == id);
-
-    if (dataInCart == undefined) {
-      product_cart.amount = 1;
-      cart.push(product_cart);
-    } else {
-      for (let index = 0; index < cart.length; index++) {
-        if (cart[index].id == product_cart.id) {
-          cart[index].amount += 1;
-        }
-      }
-    }
-    newCashier[objIndex].amount -= 1;
-
-    setState(state + 1);
-    action(ADD_ITEM_TO_CART_REQ, cart);
+    let input = {
+      user_id: 1,
+      product_id: id,
+    };
+    action(ADD_ITEM_TO_CART_REQ, { input: input });
+    action(CASHIER_CALL_FILTER_DATA_API_REQ, {
+      input: redirect,
+    });
+    action(CALL_ITEM_CART_REQ, {
+      input: { user_id: 1 },
+    });
   };
 
-  React.useEffect(() => {
-
-  }, []);
+  React.useEffect(() => {}, []);
 
   return (
     <div>
-      <CRow>
-        <CCol md="7">
-          <CCard>
-            <CCardHeader>
-              <strong>Products</strong>
-            </CCardHeader>
-            <CCardBody>
-              {data && (
-                <CDataTable
-                  items={data}
-                  fields={fields}
-                  sorter
-                  scopedSlots={{
-                    "#": (item, index) => <td>{index + 1}</td>,
-                    img: (item, index) => {
-                      return (
-                        <td key={index}>
-                          <img src={item.img} />
-                        </td>
-                      );
-                    },
-                    action: (item) => (
-                      <td>
-                        <CButton
-                          className="mr-2"
-                          color="info"
-                          size="sm"
-                          onClick={() => {
-                            onAddToCart(item.id);
-                          }}
-                        >
-                          <CIcon name="cil-bell" />
-                        </CButton>
-                      </td>
-                    ),
-                  }}
-                />
-              )}
-            </CCardBody>
-          </CCard>
-        </CCol>
-        <CCol md="5">
-          <Cart />
-        </CCol>
-      </CRow>
+      <CCard>
+        <CCardHeader>
+          <strong>Products</strong>
+        </CCardHeader>
+        <CCardBody>
+          {data && (
+            <CDataTable
+              items={data}
+              fields={fields}
+              sorter
+              scopedSlots={{
+                "#": (item, index) => <td>{index + 1}</td>,
+                img: (item, index) => {
+                  return (
+                    <td key={index}>
+                      <img src={item.img} />
+                    </td>
+                  );
+                },
+                action: (item) => {
+                  return (
+                    <td>
+                      <CButton
+                        disabled={item.amount <= 0 ? true : false}
+                        className="mr-2"
+                        color="info"
+                        size="sm"
+                        onClick={() => {
+                          onAddToCart(item.id);
+                        }}
+                      >
+                        <CIcon name="cil-bell" />
+                      </CButton>
+                    </td>
+                  );
+                },
+              }}
+            />
+          )}
+        </CCardBody>
+      </CCard>
     </div>
   );
 }

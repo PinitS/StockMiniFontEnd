@@ -11,6 +11,7 @@ import setProductFilter from "./setProductFilter.reducer";
 import setProductHistory from "./setProductHistory.reducer";
 import setCashier from "./setCashier.reducer";
 import setCart from "./setCart.reducer";
+import setOrder from "./setOrder.reducer";
 
 export default combineReducers({
   setResponsive,
@@ -25,4 +26,5 @@ export default combineReducers({
   setProductHistory,
   setCashier,
   setCart,
+  setOrder
 });

@@ -8,14 +8,18 @@ export function* setCashierFiltersData({ payload }) {
   const formData = new FormData();
   if (payload.input != null) {
     for (const [key, value] of Object.entries(payload.input)) {
-      value == 0 ? (value = 'null') : (value = value);
+      value == 0 ? (value = "null") : (value = value);
       formData.append(key, value);
     }
   }
-  const response = yield call(fetch, apiConfig.path + path +"getProductsFillers", {
-    method: "POST",
-    body: formData,
-  });
+  const response = yield call(
+    fetch,
+    apiConfig.path + path + "getProductsFillers",
+    {
+      method: "POST",
+      body: formData,
+    }
+  );
   const data = yield response.json();
   yield put({
     type: CASHIER_CALL_FILTER_DATA_API,

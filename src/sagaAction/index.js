@@ -66,15 +66,40 @@ import {
   setDeleteProductData,
   setUpdateProductData,
 } from "./product.action";
-import { PRODUCT_CALL_FILTER_DATA_API_REQ, PRODUCT_CREATE_HISTORY_DATA_API_REQ } from "src/sagaType/productStock";
-import { setProductFiltersData , setCreateProductHistoryData } from "./productStock.action";
-import { CALL_PRODUCT_HISTORY_DATA_API_REQ, CHANGE_PRODUCT_HISTORY_DATA_API_REQ, CLEAR_PRODUCT_HISTORY_DATA_API_REQ } from "src/sagaType/productHistory";
-import { resetProductHistory, setChangeProductHistory, setProductHistory } from "./productHistory.action";
+import {
+  PRODUCT_CALL_FILTER_DATA_API_REQ,
+  PRODUCT_CREATE_HISTORY_DATA_API_REQ,
+} from "src/sagaType/productStock";
+import {
+  setProductFiltersData,
+  setCreateProductHistoryData,
+} from "./productStock.action";
+import {
+  CALL_PRODUCT_HISTORY_DATA_API_REQ,
+  CHANGE_PRODUCT_HISTORY_DATA_API_REQ,
+  CLEAR_PRODUCT_HISTORY_DATA_API_REQ,
+} from "src/sagaType/productHistory";
+import {
+  resetProductHistory,
+  setChangeProductHistory,
+  setProductHistory,
+} from "./productHistory.action";
 import { CASHIER_CALL_FILTER_DATA_API_REQ } from "src/sagaType/cashier";
 import { setCashierFiltersData } from "./cashier.action";
-import { setAddDataToCart } from "./cart.action";
-import { ADD_ITEM_TO_CART_REQ } from "src/sagaType/cart";
-
+import {
+  setAddDataToCart,
+  setCartData,
+  setChangeDataInCart,
+  setDeleteDataCart,
+} from "./cart.action";
+import {
+  ADD_ITEM_TO_CART_REQ,
+  CALL_ITEM_CART_REQ,
+  CHANGE_ITEM_IN_CART_REQ,
+  DELETE_ITEM_IN_CART_REQ,
+} from "src/sagaType/cart";
+import { CHANGE_STATUS_ORDER_REQ, ORDER_CALL_BY_ID_DATA_API_REQ } from "src/sagaType/order";
+import { setOrderChangeStatusOrder, setOrderStatusOne } from "./order.action";
 
 export function* watchSetResponsive() {
   yield takeEvery(SET_RESPONSIVE_REQ, setResponsive);
@@ -162,7 +187,10 @@ export function* watchSetProductFiltersData() {
   yield takeEvery(PRODUCT_CALL_FILTER_DATA_API_REQ, setProductFiltersData);
 }
 export function* watchSetCreateProductHistoryData() {
-  yield takeEvery(PRODUCT_CREATE_HISTORY_DATA_API_REQ, setCreateProductHistoryData);
+  yield takeEvery(
+    PRODUCT_CREATE_HISTORY_DATA_API_REQ,
+    setCreateProductHistoryData
+  );
 }
 //end Product Stock
 export function* watchSetProductHistory() {
@@ -182,6 +210,26 @@ export function* watchSetCashierFilersData() {
 
 export function* watchSetAddDataToCart() {
   yield takeEvery(ADD_ITEM_TO_CART_REQ, setAddDataToCart);
+}
+
+export function* watchSetCartData() {
+  yield takeEvery(CALL_ITEM_CART_REQ, setCartData);
+}
+
+export function* watchSetDelCartData() {
+  yield takeEvery(DELETE_ITEM_IN_CART_REQ, setDeleteDataCart);
+}
+
+export function* watchSetChangeCartData() {
+  yield takeEvery(CHANGE_ITEM_IN_CART_REQ, setChangeDataInCart);
+}
+
+export function* watchSetOrderStatusOne() {
+  yield takeEvery(ORDER_CALL_BY_ID_DATA_API_REQ, setOrderStatusOne);
+}
+
+export function* watchSetOrderChangeStatusOrder() {
+  yield takeEvery(CHANGE_STATUS_ORDER_REQ, setOrderChangeStatusOrder);
 }
 
 export default function* rootSaga() {
@@ -230,5 +278,11 @@ export default function* rootSaga() {
     watchSetCashierFilersData(),
     //add to cart
     watchSetAddDataToCart(),
+    watchSetCartData(),
+    watchSetDelCartData(),
+    watchSetChangeCartData(),
+    //order
+    watchSetOrderStatusOne(),
+    watchSetOrderChangeStatusOrder(),
   ]);
 }

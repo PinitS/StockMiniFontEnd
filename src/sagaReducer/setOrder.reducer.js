@@ -1,17 +1,13 @@
-import { CALL_ITEM_CART } from "src/sagaType/cart";
+import { ORDER_CALL_BY_ID_DATA_API } from "src/sagaType/order";
 const initialState = {
   data: [],
-  sum: null,
-  order: null,
 };
 export default (state = initialState, { type, payload }) => {
   switch (type) {
-    case CALL_ITEM_CART:
+    case ORDER_CALL_BY_ID_DATA_API:
       return {
         ...state,
         data: payload.data,
-        sum: payload.sum,
-        order: payload.order,
       };
     default:
       return state;

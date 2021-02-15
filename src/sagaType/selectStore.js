@@ -1,0 +1,2 @@
+export const SELECT_STORE = "SELECT_STORE";
+export const SELECT_STORE_REQ = "SELECT_STORE_REQ";

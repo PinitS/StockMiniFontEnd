@@ -12,6 +12,9 @@ import setProductHistory from "./setProductHistory.reducer";
 import setCashier from "./setCashier.reducer";
 import setCart from "./setCart.reducer";
 import setOrder from "./setOrder.reducer";
+import setSelectStore from "./setSelectStore.reducer";
+import setStoreOrder from "./setStoreOrder.reducer";
+import setCartStoreOrder from "./setCartStoreOrder.reducer";
 
 export default combineReducers({
   setResponsive,
@@ -26,5 +29,8 @@ export default combineReducers({
   setProductHistory,
   setCashier,
   setCart,
-  setOrder
+  setOrder,
+  setSelectStore,
+  setStoreOrder,
+  setCartStoreOrder
 });

@@ -77,6 +77,7 @@ const ImportWithdraw = React.lazy(() =>
   import("./views/importWithdraw/ImportWithdraw")
 );
 const Cashier = React.lazy(() => import("./views/cashier/Cashier"));
+const Store = React.lazy(() => import("./views/store/MainStore"));
 
 //end Custom config
 
@@ -97,6 +98,12 @@ const routes = [
     path: "/cashier/Cashier",
     name: "Cashier",
     component: Cashier,
+  },
+
+  {
+    path: "/Store/Store",
+    name: "Store",
+    component: Store,
   },
 
   //end Custom config

@@ -100,6 +100,11 @@ import {
 } from "src/sagaType/cart";
 import { CHANGE_STATUS_ORDER_REQ, ORDER_CALL_BY_ID_DATA_API_REQ } from "src/sagaType/order";
 import { setOrderChangeStatusOrder, setOrderStatusOne } from "./order.action";
+import { SELECT_STORE_REQ } from "src/sagaType/selectStore";
+import { setSelectStore } from "./selectStore.action";
+import { ADD_TO_CART_STORE_ORDER_REQ, CLEAR_STORE_ORDER_REQ, DEL_STORE_ORDER_REQ, GET_STORE_ORDER_REQ, UPDATE_STATUS_STORE_ORDER_REQ } from "src/sagaType/storeOrder";
+import { setAllStoreOrderData, setClrStoreOrderData, setDelStoreOrderData, setUpdateStoreOrderData } from "./storeOrder.action";
+import { setAddToCartStoreOrder } from "./storeOrderCart.action";
 
 export function* watchSetResponsive() {
   yield takeEvery(SET_RESPONSIVE_REQ, setResponsive);
@@ -232,6 +237,31 @@ export function* watchSetOrderChangeStatusOrder() {
   yield takeEvery(CHANGE_STATUS_ORDER_REQ, setOrderChangeStatusOrder);
 }
 
+export function* watchSetSelectStore() {
+  yield takeEvery(SELECT_STORE_REQ, setSelectStore);
+}
+
+export function* watchSetAllStoreOrderData() {
+  yield takeEvery(GET_STORE_ORDER_REQ, setAllStoreOrderData);
+}
+
+export function* watchSetAddToCartStoreOrder() {
+  yield takeEvery(ADD_TO_CART_STORE_ORDER_REQ, setAddToCartStoreOrder);
+}
+
+export function* watchSetDelStoreOrderData() {
+  yield takeEvery(DEL_STORE_ORDER_REQ, setDelStoreOrderData);
+}
+
+export function* watchSetClrStoreOrderData() {
+  yield takeEvery(CLEAR_STORE_ORDER_REQ, setClrStoreOrderData);
+}
+
+export function* watchSetUpdateStoreOrderData() {
+  yield takeEvery(UPDATE_STATUS_STORE_ORDER_REQ, setUpdateStoreOrderData);
+}
+
+
 export default function* rootSaga() {
   yield all([
     watchSetResponsive(),
@@ -284,5 +314,13 @@ export default function* rootSaga() {
     //order
     watchSetOrderStatusOne(),
     watchSetOrderChangeStatusOrder(),
+    //selectStore
+    watchSetSelectStore(),
+    watchSetAllStoreOrderData(),
+    watchSetAddToCartStoreOrder(),
+    watchSetDelStoreOrderData(),
+    watchSetClrStoreOrderData(),
+
+    watchSetUpdateStoreOrderData(),
   ]);
 }

@@ -2,7 +2,6 @@ import React from "react";
 import {
   CDataTable,
   CCard,
-  CCardHeader,
   CCardBody,
   CButton,
   CRow,
@@ -34,16 +33,12 @@ const fields = [
 ];
 
 const fieldsOrder = [
-  { key: "#", lable: "" },
-  { key: "name", lable: "" },
-  { key: "amount", lable: "" },
-  { key: "price", lable: "" },
-  { key: "sum_price", label: "sum" },
-  {
-    key: "action",
-    sorter: false,
-    filter: false,
-  },
+  { key: "#"},
+  { key: "name"},
+  { key: "amount"},
+  { key: "price"},
+  { key: "sum_price"},
+  { key: "status"},
 ];
 
 export default function Cart() {
@@ -71,8 +66,6 @@ export default function Cart() {
     });
   }, []);
 
-  console.log("dataOrder", dataOrder);
-
   return (
     <div>
       <CCard>
@@ -84,7 +77,7 @@ export default function Cart() {
               </CNavItem>
               {dataOrder.map((item, index) => (
                 <CNavItem key={index}>
-                  <CNavLink data-tab={index}>Order : {item.order_id}</CNavLink>
+                  <CNavLink data-tab={index}>Order : {item.order.id}</CNavLink>
                 </CNavItem>
               ))}
             </CNav>
@@ -162,13 +155,13 @@ export default function Cart() {
                         <strong>All Price : {item.sum.sum_all_price}</strong>
                       </CCol>
                       <CCol md="6">
-                        {(
+                        {item.order.status == 2 &&(
                           <CButton
                             className="float-right mt-1 mt-2"
                             color="warning"
                             size="sm"
                             onClick={() => {
-                              console.log(item.order_id);
+                              console.log(item.order.id);
                             }}
                           >
                             <strong>Check bill</strong>

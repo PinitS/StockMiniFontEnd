@@ -50,8 +50,6 @@ export default function Products() {
     });
   };
 
-  React.useEffect(() => {}, []);
-
   return (
     <div>
       <CCard>

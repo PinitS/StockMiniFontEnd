@@ -6,7 +6,6 @@ import {
   CCol,
   CCard,
   CCardBody,
-  CFormGroup,
 } from "@coreui/react";
 
 import { useDispatch, useSelector } from "react-redux";

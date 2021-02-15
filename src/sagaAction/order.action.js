@@ -36,6 +36,5 @@ export function* setOrderChangeStatusOrder({ payload }) {
   const data = yield response.json();
   yield toast(data == null ? "Add Order Fail" : data.msg);
   yield setOrderStatusOne({ payload: { user_id: payload.user_id } });
-  console.log('payload.user_id', payload.user_id)
   yield setCartData({payload: { input: payload.user_id } })
 }

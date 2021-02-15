@@ -11,13 +11,11 @@ import { setProductFiltersData } from "./productStock.action";
 const path = "ProductHistory/";
 
 export function* setProductHistory({ payload }) {
-  console.log("payload", payload);
   const response = yield call(
     fetch,
     apiConfig.path + path + "getAll/" + payload.id
   );
   const data = yield response.json();
-  console.log("data", data);
   yield put({
     type: CALL_PRODUCT_HISTORY_DATA_API,
     payload: { data: data.dataSet, id: payload.id },
@@ -31,7 +29,6 @@ export function* resetProductHistory() {
 }
 
 export function* setChangeProductHistory({ payload }) {
-  console.log("payload in chan", payload);
   const formData = new FormData();
   for (const [key, value] of Object.entries(payload.input)) {
     formData.append(key, value);

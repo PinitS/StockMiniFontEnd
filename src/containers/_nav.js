@@ -70,7 +70,18 @@ const _nav = [
     _tag: "CSidebarNavItem",
     name: "Cashier",
     to: "/Cashier/Cashier",
-    icon: "cil-calculator",
+    icon: "cilScrubber",
+  },
+
+  {
+    _tag: "CSidebarNavTitle",
+    _children: ["Store"],
+  },
+  {
+    _tag: "CSidebarNavItem",
+    name: "Store",
+    to: "/Store/Store",
+    icon: "cilPeople",
   },
 
   //end custom nav

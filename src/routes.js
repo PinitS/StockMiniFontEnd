@@ -78,6 +78,7 @@ const ImportWithdraw = React.lazy(() =>
 );
 const Cashier = React.lazy(() => import("./views/cashier/Cashier"));
 const Store = React.lazy(() => import("./views/store/MainStore"));
+const ServiceStore = React.lazy(() => import("./views/serviceStore/ServiceStore"));
 
 //end Custom config
 
@@ -105,6 +106,7 @@ const routes = [
     name: "Store",
     component: Store,
   },
+  { path: "/ServiceStore", name: "ServiceStore", component: ServiceStore },
 
   //end Custom config
 

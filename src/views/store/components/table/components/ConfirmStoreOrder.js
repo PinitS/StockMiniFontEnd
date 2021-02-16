@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useRef } from "react";
+import { useReactToPrint } from "react-to-print";
 
 import {
   CCard,
@@ -9,6 +10,7 @@ import {
 } from "@coreui/react";
 import { useDispatch, useSelector } from "react-redux";
 import { UPDATE_STATUS_STORE_ORDER_REQ } from "src/sagaType/storeOrder";
+import PrintStoreOrder from "./PrintStoreOrder";
 
 export default function ConfirmStoreOrder() {
   const setCartStoreOrder = useSelector(
@@ -16,6 +18,11 @@ export default function ConfirmStoreOrder() {
   );
   const dispatch = useDispatch();
   const action = (type, payload) => dispatch({ type, payload });
+
+  const componentRef = useRef();
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+  });
 
   const fields = [
     { key: "#" },
@@ -40,6 +47,7 @@ export default function ConfirmStoreOrder() {
               size="sm"
               disabled={setCartStoreOrder.data.length == 0 ? true : false}
               onClick={() => {
+                handlePrint();
                 updateToDataBase();
               }}
             >
@@ -59,6 +67,9 @@ export default function ConfirmStoreOrder() {
           />
         </CCardBody>
       </CCard>
+      <div style={{ display: "none" }}>
+        <PrintStoreOrder value={setCartStoreOrder.data} ref={componentRef} />
+      </div>
     </div>
   );
 }

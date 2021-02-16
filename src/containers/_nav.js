@@ -12,7 +12,6 @@ const _nav = [
       text: "NEW",
     },
   },
-  //custom nav
   {
     _tag: "CSidebarNavTitle",
     _children: ["Manages"],
@@ -83,6 +82,16 @@ const _nav = [
     to: "/Store/Store",
     icon: "cilPeople",
   },
+  {
+    _tag: "CSidebarNavTitle",
+    _children: ["ServiceStore"],
+  },
+  {
+    _tag: "CSidebarNavItem",
+    name: "ServiceStore",
+    to: "/serviceStore/ServiceStore",
+    icon: "cilShareAll",
+  },
 
   //end custom nav
 
@@ -94,12 +103,6 @@ const _nav = [
     _tag: "CSidebarNavItem",
     name: "Colors",
     to: "/theme/colors",
-    icon: "cil-drop",
-  },
-  {
-    _tag: "CSidebarNavItem",
-    name: "Tester",
-    to: "/Tester",
     icon: "cil-drop",
   },
   {
@@ -388,6 +391,16 @@ const _nav = [
     _tag: "CSidebarNavDivider",
     className: "m-2",
   },
+  
+  /////////////////
+  {
+    _tag: "CSidebarNavItem",
+    name: "Tester",
+    to: "/Tester",
+    icon: "cil-drop",
+  },
+  /////////////////
+  //custom nav
 ];
 
 export default _nav;

@@ -52,6 +52,8 @@ export default function Cart() {
   const redirect = useSelector(({ setCashier }) => setCashier.input);
   const dataOrder = useSelector(({ setOrder }) => setOrder.data);
 
+  console.log('dataOrder', dataOrder)
+
   const deleteDataCart = (order_id, product_id) => {
     action(DELETE_ITEM_IN_CART_REQ, {
       subPath: "delete/" + order_id + "/" + product_id,

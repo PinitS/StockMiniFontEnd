@@ -42,6 +42,7 @@ export default function MainTable() {
                     size="sm"
                     onClick={() => {
                       action(SELECT_STORE_REQ, null);
+                      action(GET_STORE_ORDER_REQ, { store_id: null });
                     }}
                   >
                     Exit

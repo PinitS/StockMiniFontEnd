@@ -105,6 +105,9 @@ import { setSelectStore } from "./selectStore.action";
 import { ADD_TO_CART_STORE_ORDER_REQ, CLEAR_STORE_ORDER_REQ, DEL_STORE_ORDER_REQ, GET_STORE_ORDER_REQ, UPDATE_STATUS_STORE_ORDER_REQ } from "src/sagaType/storeOrder";
 import { setAllStoreOrderData, setClrStoreOrderData, setDelStoreOrderData, setUpdateStoreOrderData } from "./storeOrder.action";
 import { setAddToCartStoreOrder } from "./storeOrderCart.action";
+import { SERVICE_CHANGE_STATUS_ORDER_REQ, SERVICE_GET_ORDER_REQ } from "src/sagaType/serviceOrder";
+import { setServiceChangeStatus, setServiceData } from "./service.action";
+
 
 export function* watchSetResponsive() {
   yield takeEvery(SET_RESPONSIVE_REQ, setResponsive);
@@ -262,6 +265,18 @@ export function* watchSetUpdateStoreOrderData() {
 }
 
 
+export function* watchSetServiceData() {
+  yield takeEvery(SERVICE_GET_ORDER_REQ , setServiceData);
+}
+
+export function* watchSetServiceChangeStatus() {
+  yield takeEvery(SERVICE_CHANGE_STATUS_ORDER_REQ , setServiceChangeStatus);
+}
+
+
+
+
+
 export default function* rootSaga() {
   yield all([
     watchSetResponsive(),
@@ -322,5 +337,7 @@ export default function* rootSaga() {
     watchSetClrStoreOrderData(),
 
     watchSetUpdateStoreOrderData(),
+    watchSetServiceData(),
+    watchSetServiceChangeStatus(),
   ]);
 }

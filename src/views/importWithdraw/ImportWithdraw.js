@@ -72,9 +72,6 @@ export default function ImportWithdraw() {
                     sorter
                     pagination
                     scopedSlots={{
-                      // "#": (item, index) => (
-                      //   <td style={verticalMiddleStyle}>{index + 1}</td>
-                      // ), // ทำให้ตรงกลางในแนวตั้ง
                       "#": (item, index) => <td>{index + 1}</td>,
                       img: (item, index) => {
                         return (
@@ -83,7 +80,6 @@ export default function ImportWithdraw() {
                           </td>
                         );
                       },
-
                       action: (item) => (
                         <td>
                           <CButton

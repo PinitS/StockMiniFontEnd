@@ -11,19 +11,17 @@ export default class PrintStoreOrder extends Component {
       { key: "amount" },
     ];
 
-    let data = this.props.value;
-    console.log("data", data);
+
     return (
       <CContainer fluid>
         <CRow>
           <CCol>
             <div className="pt-5">
-              <h1 className="text-center mb-5">Order Confirm</h1>
-
+              <h1 className="mb-5">Order Confirm</h1>
               <CDataTable
-              className="mt-5"
                 items={this.props.value}
                 fields={fields}
+                border
                 scopedSlots={{
                   "#": (item, index) => <td>{index + 1}</td>,
                 }}

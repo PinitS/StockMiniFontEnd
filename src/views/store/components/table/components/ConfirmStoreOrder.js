@@ -29,7 +29,6 @@ export default function ConfirmStoreOrder() {
     { key: "order_id", label: "Order" },
     { key: "name" },
     { key: "amount" },
-    { key: "status" },
   ];
 
   const updateToDataBase = () => {

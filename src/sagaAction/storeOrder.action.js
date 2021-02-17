@@ -43,8 +43,5 @@ export function* setUpdateStoreOrderData({ payload }) {
     body: formData,
   });
   const data = yield response.json();
-
-
-
   yield put({ type: CLEAR_STORE_ORDER });
 }

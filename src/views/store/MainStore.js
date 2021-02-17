@@ -14,7 +14,6 @@ export default function Store() {
   React.useEffect(() => {
     action(GET_DROPDOWN_DATA_API_REQ);
     action(GET_STORE_ORDER_REQ, { store_id: null });
-
   }, []);
 
   return (

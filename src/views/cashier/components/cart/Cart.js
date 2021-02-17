@@ -1,4 +1,7 @@
-import React from "react";
+import React, { useRef } from "react";
+
+import { useReactToPrint } from "react-to-print";
+
 import {
   CDataTable,
   CCard,
@@ -12,12 +15,19 @@ import {
   CTabs,
   CTabContent,
   CTabPane,
+  CBadge,
 } from "@coreui/react";
 import { useDispatch, useSelector } from "react-redux";
 import CIcon from "@coreui/icons-react";
 import { CALL_ITEM_CART_REQ, DELETE_ITEM_IN_CART_REQ } from "src/sagaType/cart";
 import { IS_OPEN_MODAL_REQ } from "src/sagaType/modal";
 import AmountForm from "./components/AmountForm";
+import {
+  colorConfigColor,
+  colorConfigText,
+} from "../../../../static/colorConfig";
+import PrintCartOrder from "./components/PrintCartOrder";
+import { CHANGE_STATUS_ORDER_REQ } from "src/sagaType/order";
 
 const fields = [
   { key: "#" },
@@ -33,12 +43,12 @@ const fields = [
 ];
 
 const fieldsOrder = [
-  { key: "#"},
-  { key: "name"},
-  { key: "amount"},
-  { key: "price"},
-  { key: "sum_price"},
-  { key: "status"},
+  { key: "#" },
+  { key: "name" },
+  { key: "amount" },
+  { key: "price" },
+  { key: "sum_price" },
+  { key: "status" },
 ];
 
 export default function Cart() {
@@ -52,8 +62,6 @@ export default function Cart() {
   const redirect = useSelector(({ setCashier }) => setCashier.input);
   const dataOrder = useSelector(({ setOrder }) => setOrder.data);
 
-  console.log('dataOrder', dataOrder)
-
   const deleteDataCart = (order_id, product_id) => {
     action(DELETE_ITEM_IN_CART_REQ, {
       subPath: "delete/" + order_id + "/" + product_id,
@@ -62,7 +70,29 @@ export default function Cart() {
     });
   };
 
+  console.log("dataOrder", dataOrder);
+
+  const [data, setData] = React.useState(null);
+  const [sum, setSum] = React.useState(null);
+  const [order, setOrder] = React.useState(null);
+
+  const componentRef = useRef();
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+  });
+
+  const onSubmit = (id) => {
+    let input = {
+      id: id,
+      status: 3,
+    };
+    console.log("input", input);
+
+    action(CHANGE_STATUS_ORDER_REQ, { input: input, user_id: 1 });
+  };
+
   React.useEffect(() => {
+    setData(null);
     action(CALL_ITEM_CART_REQ, {
       input: { user_id: 1 },
     });
@@ -126,8 +156,11 @@ export default function Cart() {
                 {dataCartSum && (
                   <div>
                     <CRow>
-                    <CCol md="6">
-                        <strong> All Amount : {dataCartSum.sum_all_amount}</strong>
+                      <CCol md="6">
+                        <strong>
+                          {" "}
+                          All Amount : {dataCartSum.sum_all_amount}
+                        </strong>
                         <br />
                         <strong>All Price : {dataCartSum.sum_all_price}</strong>
                       </CCol>
@@ -147,6 +180,13 @@ export default function Cart() {
                     striped
                     scopedSlots={{
                       "#": (item, index) => <td>{index + 1}</td>,
+                      status: (item, index) => (
+                        <td>
+                          <CBadge color={colorConfigColor[item.status]}>
+                            {colorConfigText[item.status]}
+                          </CBadge>
+                        </td>
+                      ),
                     }}
                   />
                   <div>
@@ -157,13 +197,17 @@ export default function Cart() {
                         <strong>All Price : {item.sum.sum_all_price}</strong>
                       </CCol>
                       <CCol md="6">
-                        {item.order.status == 2 &&(
+                        {item.order.status == 2 && (
                           <CButton
                             className="float-right mt-1 mt-2"
                             color="warning"
                             size="sm"
                             onClick={() => {
-                              console.log(item.order.id);
+                              setData(item.data);
+                              setSum(item.sum);
+                              setOrder(item.order.id);
+                              handlePrint();
+                              onSubmit(item.order.id);
                             }}
                           >
                             <strong>Check bill</strong>
@@ -176,6 +220,14 @@ export default function Cart() {
               </CTabContent>
             ))}
           </CTabs>
+          <div style={{ display: "none" }}>
+            <PrintCartOrder
+              data={data}
+              sum={sum}
+              order={order}
+              ref={componentRef}
+            />
+          </div>
         </CCardBody>
       </CCard>
     </div>

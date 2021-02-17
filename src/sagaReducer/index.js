@@ -15,6 +15,7 @@ import setOrder from "./setOrder.reducer";
 import setSelectStore from "./setSelectStore.reducer";
 import setStoreOrder from "./setStoreOrder.reducer";
 import setCartStoreOrder from "./setCartStoreOrder.reducer";
+import setServiceStore from "./setServiceStore.reducer";
 
 export default combineReducers({
   setResponsive,
@@ -32,5 +33,6 @@ export default combineReducers({
   setOrder,
   setSelectStore,
   setStoreOrder,
-  setCartStoreOrder
+  setCartStoreOrder,
+  setServiceStore,
 });

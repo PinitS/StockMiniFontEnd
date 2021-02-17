@@ -12,10 +12,12 @@ export default function ConfirmOrder() {
 
   const onSubmit = () => {
     let input = {
-      id:  orderCart.id,
+      id: orderCart.id,
+      status: 1,
     };
     action(CHANGE_STATUS_ORDER_REQ, {
-      input: input, user_id : 1
+      input: input,
+      user_id: 1,
     });
   };
 
@@ -30,7 +32,9 @@ export default function ConfirmOrder() {
         <CCol col="6">
           <CButton
             color="primary float-right mt-1"
-            disabled={dataCart == undefined || dataCart.length == 0 ? true : false}
+            disabled={
+              dataCart == undefined || dataCart.length == 0 ? true : false
+            }
             onClick={() => {
               onSubmit();
             }}
